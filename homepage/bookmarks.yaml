@@ -23,17 +23,17 @@
     - Speedtest:
         - icon: https://b.cdnst.net/images/favicons/favicon-180.png
           href: https://www.speedtest.net/
-          description: Speedtest.net - Internet Speed Test
+          description: Internet Speed Test
 
     - Fast:
         - icon: https://fast.com/assets/favicons/apple-icon-76x76.png
           href: https://fast.com/
-          description: Fast.com - Internet Speed Test
+          description: Internet Speed Test
 
     - Banki24:
         - icon: https://banki24.by/favicon.svg
           href: https://banki24.by/
-          description: Banki24 - Online banking and financial services in Belarus
+          description: Online banking and financial services in Belarus
 
 - Personal:
     - Gmail:
