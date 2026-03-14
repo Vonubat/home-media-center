@@ -43,8 +43,8 @@ section() { echo -e "\n${BLUE}════════════════�
 # ─── Gather credentials ────────────────────────────────────────
 section "Gathering credentials"
 
-read -p "Main username (default: ewancoder): " MAIN_USER
-MAIN_USER="${MAIN_USER:-ewancoder}"
+read -p "Main username (default: vonubat): " MAIN_USER
+MAIN_USER="${MAIN_USER:-vonubat}"
 
 read -p "Kinozal username: " KINOZAL_USER
 read -sp "Kinozal password: " KINOZAL_PASS; echo
@@ -100,7 +100,7 @@ configure_qbittorrent() {
     if [ "${QBITTORRENT_WEBUI_PORT}" != "8080" ]; then
         info "Custom port detected ($QBITTORRENT_WEBUI_PORT), disabling host header validation..."
         local qbt_conf="${QBITTORRENT_FOLDER}/qBittorrent/qBittorrent.conf"
-        docker stop tyr-media-qbittorrent
+        docker stop home-media-qbittorrent
         if [ -f "$qbt_conf" ]; then
             if grep -q "WebUI\\\\HostHeaderValidation" "$qbt_conf"; then
                 sed -i 's/WebUI\\HostHeaderValidation=.*/WebUI\\HostHeaderValidation=false/' "$qbt_conf"
@@ -109,14 +109,14 @@ configure_qbittorrent() {
             fi
             log "Host header validation disabled"
         fi
-        docker start tyr-media-qbittorrent
+        docker start home-media-qbittorrent
     fi
 
     # Get temporary password from docker logs
     info "Getting temporary password from docker logs..."
     sleep 5
     local temp_pass
-    temp_pass=$(docker logs tyr-media-qbittorrent 2>&1 | grep -oP 'temporary password.*: \K\S+' | tail -1)
+    temp_pass=$(docker logs home-media-qbittorrent 2>&1 | grep -oP 'temporary password.*: \K\S+' | tail -1)
     if [ -z "$temp_pass" ]; then
         err "Could not find temporary password in qBitTorrent logs"
         return 1
@@ -184,7 +184,7 @@ PREFS
     info "Checking listening port (PIA port forwarding)..."
     local listen_port pia_port
     listen_port=$(curl -s -b "$cookie_jar" "$QB_URL/api/v2/app/preferences" | jq -r '.listen_port')
-    pia_port=$(docker logs tyr-media-gluetun 2>&1 | grep -oP '\[port forwarding\] port forwarded is \K\d+' | tail -1)
+    pia_port=$(docker logs home-media-gluetun 2>&1 | grep -oP '\[port forwarding\] port forwarded is \K\d+' | tail -1)
     if [ "$listen_port" != "$pia_port" ]; then
         err "Port mismatch: qBittorrent=$listen_port, PIA forwarded=$pia_port"
         read -rp "    [Enter] to continue anyway / Ctrl-C to abort: " _ </dev/tty

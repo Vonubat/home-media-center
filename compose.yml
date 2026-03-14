@@ -1,15 +1,15 @@
-name: tyr-media
+name: home-media
 
 networks:
-  tyr-media-net:
-    name: tyr-media-net
+  home-media-net:
+    name: home-media-net
 
 services:
-  tyr-media-gluetun:
-    image: qmcgaw/gluetun
-    #image: alpine:latest # For no vpn.
-    #command: sleep infinity
-    container_name: tyr-media-gluetun
+  home-media-gluetun:
+    # image: qmcgaw/gluetun
+    image: alpine:latest # For no vpn.
+    command: sleep infinity
+    container_name: home-media-gluetun
     cap_add:
       - NET_ADMIN
     devices:
@@ -35,13 +35,15 @@ services:
       - VPN_PORT_FORWARDING_DOWN_COMMAND=/bin/sh -c 'wget -O- -nv --retry-connrefused --post-data "json={\"listen_port\":0,\"current_network_interface\":\"lo\"}" http://127.0.0.1:8080/api/v2/app/setPreferences'
     restart: unless-stopped
     networks:
-      - tyr-media-net
+      - home-media-net
     ports:
       - ${PROWLARR_PORT}:9696
       - ${SONARR_PORT}:8989
       - ${RADARR_PORT}:7878
       - ${BAZARR_PORT}:6767
       - ${QBITTORRENT_WEBUI_PORT}:8080
+      - ${QBITTORRENT_FORWARD_PORT}:33333/udp
+      - ${QBITTORRENT_FORWARD_PORT}:33333/tcp
       - ${SEERR_PORT}:5055
       - ${JELLYFIN_PORT}:8096
       - ${KAPOWARR_PORT}:5656
@@ -52,11 +54,15 @@ services:
       - ${KAVITA_PORT}:5000
       - ${HTTP_PROXY_PORT}:8888/tcp # HTTP proxy
     healthcheck:
-      test: ["CMD-SHELL", "wget --spider http://localhost:8888 2>&1 | grep -q '400 Bad Request' || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget --spider http://localhost:8888 2>&1 | grep -q '400 Bad Request' || exit 1",
+        ]
 
-  tyr-media-prowlarr:
+  home-media-prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
-    container_name: tyr-media-prowlarr
+    container_name: home-media-prowlarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -64,26 +70,26 @@ services:
     volumes:
       - ${PROWLARR_FOLDER}:/config
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:9696 || exit 1"]
 
-  tyr-media-flaresolverr:
+  home-media-flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: tyr-media-flaresolverr
+    container_name: home-media-flaresolverr
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
       - TZ=${TIMEZONE}
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8191 || exit 1"]
 
-  tyr-media-sonarr:
+  home-media-sonarr:
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: tyr-media-sonarr
+    container_name: home-media-sonarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -93,13 +99,13 @@ services:
       - ${DATA_FOLDER}:/data
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8989 || exit 1"]
 
-  tyr-media-radarr:
+  home-media-radarr:
     image: lscr.io/linuxserver/radarr:latest
-    container_name: tyr-media-radarr
+    container_name: home-media-radarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -109,13 +115,13 @@ services:
       - ${DATA_FOLDER}:/data
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:7878 || exit 1"]
 
-  tyr-media-bazarr:
+  home-media-bazarr:
     image: lscr.io/linuxserver/bazarr:latest
-    container_name: tyr-media-bazarr
+    container_name: home-media-bazarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -125,13 +131,13 @@ services:
       - ${DATA_FOLDER}:/data
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:6767 || exit 1"]
 
-  tyr-media-qbittorrent:
+  home-media-qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: tyr-media-qbittorrent
+    container_name: home-media-qbittorrent
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -141,27 +147,27 @@ services:
       - ${DATA_FOLDER}:/data
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8080 || exit 1"]
 
-  tyr-media-seerr:
+  home-media-seerr:
     image: ghcr.io/seerr-team/seerr:latest
     init: true
-    container_name: tyr-media-seerr
+    container_name: home-media-seerr
     environment:
       - LOG_LEVEL=debug
       - TZ=${TIMEZONE}
     volumes:
       - ${SEERR_FOLDER}:/app/config
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
 
-  tyr-media-jellyfin:
+  home-media-jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
-    container_name: tyr-media-jellyfin
+    container_name: home-media-jellyfin
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -172,7 +178,7 @@ services:
       - ${DATA_FOLDER}:/data
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     deploy:
       resources:
         reservations:
@@ -183,9 +189,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8096 || exit 1"]
 
-  tyr-media-kavita:
+  home-media-kavita:
     image: lscr.io/linuxserver/kavita:latest
-    container_name: tyr-media-kavita
+    container_name: home-media-kavita
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -195,13 +201,13 @@ services:
       - ${DATA_FOLDER}:/data
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:5000 || exit 1"]
 
-  tyr-media-homepage:
+  home-media-homepage:
     image: ghcr.io/gethomepage/homepage:latest
-    container_name: tyr-media-homepage
+    container_name: home-media-homepage
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOSTNAME}
       PUID: ${USER_ID}
@@ -224,25 +230,25 @@ services:
       - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     networks:
-      - tyr-media-net
+      - home-media-net
     healthcheck:
       test: ["CMD-SHELL", "wget --spider http://127.0.0.1:3000 || exit 1"]
 
-  tyr-media-jellystat-db:
-    image: 'postgres:15.2'
+  home-media-jellystat-db:
+    image: "postgres:15.2"
     shm_size: 1gb
-    container_name: tyr-media-jellystat-db
+    container_name: home-media-jellystat-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
       - ${JELLYSTAT_FOLDER}/pg:/var/lib/postgresql/data
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
 
-  tyr-media-jellystat:
-    image: 'cyfershepard/jellystat:latest'
-    container_name: tyr-media-jellystat
+  home-media-jellystat:
+    image: "cyfershepard/jellystat:latest"
+    container_name: home-media-jellystat
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -253,14 +259,14 @@ services:
       TZ: ${TIMEZONE}
     volumes:
       - ${JELLYSTAT_FOLDER}/config:/app/config
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     depends_on:
-      - tyr-media-jellystat-db
+      - home-media-jellystat-db
 
-  tyr-media-kapowarr:
-    container_name: tyr-media-kapowarr
+  home-media-kapowarr:
+    container_name: home-media-kapowarr
     image: mrcas/kapowarr:latest
-    network_mode: service:tyr-media-gluetun
+    network_mode: service:home-media-gluetun
     restart: unless-stopped
     volumes:
       - ${KAPOWARR_FOLDER}:/app/db

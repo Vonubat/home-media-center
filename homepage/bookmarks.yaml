@@ -1,15 +1,9 @@
 ---
-
 - Repositories:
     - Personal profile:
         - icon: github
           href: https://github.com/ewancoder
           description: My personal GitHub profile
-
-    - TYR organization:
-        - icon: github
-          href: https://github.com/ewancoder-tyr
-          description: TyR (TypingRealm) pet projects organization
 
     - Dotfiles:
         - icon: github

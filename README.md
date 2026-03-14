@@ -1,4 +1,4 @@
-# TyR Media Server
+# Home Media Server
 
 This is a media server for media library management. It uses PIA WireGuard vpn provider, if you have a different VPN provider or need to use OpenVPN - you might need to tweak the scripts.
 
@@ -7,7 +7,7 @@ This is a media server for media library management. It uses PIA WireGuard vpn p
 1. Configure mandatory variables in `.env` file:
 
 - `MASTER_FOLDER` - the folder where everything will be stored, you can use symlinks inside it to forward different things into different places if you want
-- `HOSTNAME` - list of allowed hostnames for Homepage service: for example `localhost,ivanpc.local` (where ivanpc is your PC domain name)
+- `HOSTNAME` - list of allowed hostnames for Homepage service: for example `localhost,master.local` (where master is your PC domain name)
 
 You do not need to configure anything else in this file unless you want to.
 
@@ -46,7 +46,7 @@ Just run `./update.sh`.
   - Show external IP in status bar
 
 - Downloads
-  - Excluded file names: `*.lnk`, `*.m2ts`, `BDMV/*`
+  - Excluded file names: `*.lnk` `*.m2ts` `BDMV/*`
 
 - Connection
   - Uncheck all 4 connections limits (global, per torrent, global upload, upload per torrent)
@@ -91,6 +91,7 @@ Just run `./update.sh`.
 ### Set up Bazarr (not done by configure.sh script yet)
 
 Enable: sonarr, radarr
+
 - Providers: add (opensubtitles+enterpassword)
 - Languages:
   - Languages filter: English
@@ -118,7 +119,7 @@ Enable: sonarr, radarr
 
 ### Set up Jellyfin
 
-- Create MY account (ewancoder)
+- Create MY account (vonubat)
 - Create family account (family/qwerty) - access to all libraries
 - Library:
   - Movies: /data/media/movies
@@ -127,24 +128,26 @@ Enable: sonarr, radarr
 - Leave checked allow remote connections
 
 General - Cache path: /data/jellyfin-cache
+
 - Make sure it lives on the SSD though (for server, do not change it at all)
 
 For libraries:
-  - Preferred language: English
-  - Country: US
-  - Subtitles: Allow Text (do not allow images, they are not scalable)
-  - Automatically add to collection (movies)
-  - Automatically merge series that are spread across multiple folders (series)
-  - Automatically refresh metadata from internet - 30 days
-  - Do NOT Check metadata savers - Nfo - this thing just saves it next to files
-  - Fetcher settings
-    - Maximum number of backdrops per item - 4
-    - Minimum backdrop width - 1200
-  - Check Save artwork into media folders
-    - DO NOT check this for HDD system - save it to ssd, same with metadata
-  - Do NOT enable trickplay (all 3 checkboxes), nor chapters
-    - (if enabled when already having media) Run task: Generate Trickplay Images
-    - if enabled - uses a TON of CPU/GPU and physical TIME, just not worth it
+
+- Preferred language: English
+- Country: US
+- Subtitles: Allow Text (do not allow images, they are not scalable)
+- Automatically add to collection (movies)
+- Automatically merge series that are spread across multiple folders (series)
+- Automatically refresh metadata from internet - 30 days
+- Do NOT Check metadata savers - Nfo - this thing just saves it next to files
+- Fetcher settings
+  - Maximum number of backdrops per item - 4
+  - Minimum backdrop width - 1200
+- Check Save artwork into media folders
+  - DO NOT check this for HDD system - save it to ssd, same with metadata
+- Do NOT enable trickplay (all 3 checkboxes), nor chapters
+  - (if enabled when already having media) Run task: Generate Trickplay Images
+  - if enabled - uses a TON of CPU/GPU and physical TIME, just not worth it
 
 - Dashboard - Branding - Login disclaimer - adjust text
   - Styles: .loginDisclaimer { font-size: 5rem; color: #F55; }
@@ -154,20 +157,21 @@ For libraries:
     - Scrobbling
     - First 3 skips
     - Last one (don't remove items from trakttv)
-  - Sign in (only for ewancoder)
+  - Sign in (only for vonubat)
 
 Other Plugins (manual installation)
-  - FOR NOW - skip everything, but later consider:
-      - Intro skipper (add repo: https://intro-skipper.org/manifest.json, update ctrl+f5)
-        - Click on Inject CSS (skip button)
-        - Scan all libraries
-        - Run task: Detect and Analyze Media Segments
-      - File Transformation plugin - necessary for other plugins, for tv clients etc
-      - Jellyfin-Enhanced - many cool things
-        - Enter TMDB api key
+
+- FOR NOW - skip everything, but later consider:
+  - Intro skipper (add repo: https://intro-skipper.org/manifest.json, update ctrl+f5)
+    - Click on Inject CSS (skip button)
+    - Scan all libraries
+    - Run task: Detect and Analyze Media Segments
+  - File Transformation plugin - necessary for other plugins, for tv clients etc
+  - Jellyfin-Enhanced - many cool things
+    - Enter TMDB api key
 
 - Playback - Transcoding - NVENC + Enable for everything (all formats)
-- User settings - do not allow transcoding for ewancoder (force direct play)
+- User settings - do not allow transcoding for vonubat (force direct play)
   - Skip this, I want to watch a movie that doesn't play direct lol
 
 - Scan all libraries, check that content is present.

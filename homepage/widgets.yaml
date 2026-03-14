@@ -1,14 +1,9 @@
 ---
-
 - resources:
     label: System
     cpu: true
     memory: true
-    cputemp: true
-    tempmin: 25
-    tempmax: 80
     network: true
-    uptime: true
 
 - resources:
     label: Drives

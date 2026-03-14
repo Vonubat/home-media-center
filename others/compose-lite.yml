@@ -1,14 +1,14 @@
 # No VPN, no *arr services - pure torrent and jellyfin
-name: tyr-media
+name: home-media
 
 networks:
-  tyr-media-net:
-    name: tyr-media-net
+  home-media-net:
+    name: home-media-net
 
 services:
-  tyr-media-qbittorrent:
+  home-media-qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: tyr-media-qbittorrent
+    container_name: home-media-qbittorrent
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -18,15 +18,15 @@ services:
       - ${DOWNLOADS_FOLDER}:/downloads
     restart: unless-stopped
     networks:
-      - tyr-media-net
+      - home-media-net
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8080 || exit 1"]
     ports:
       - ${QBITTORRENT_WEBUI_PORT}:8080
 
-  tyr-media-jellyfin:
+  home-media-jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
-    container_name: tyr-media-jellyfin
+    container_name: home-media-jellyfin
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -37,7 +37,7 @@ services:
       - ${DOWNLOADS_FOLDER}:/data/downloads
     restart: unless-stopped
     networks:
-      - tyr-media-net
+      - home-media-net
     deploy:
       resources:
         reservations:
@@ -53,9 +53,9 @@ services:
       - 7359:7359/udp # Jellyfin optional
       - 1900:1900/udp # Jellyfin optional
 
-  tyr-media-homepage:
+  home-media-homepage:
     image: ghcr.io/gethomepage/homepage:latest
-    container_name: tyr-media-homepage
+    container_name: home-media-homepage
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOSTNAME}
       PUID: ${USER_ID}
@@ -72,6 +72,6 @@ services:
         target: /app/config/services.yaml
     restart: unless-stopped
     networks:
-      - tyr-media-net
+      - home-media-net
     healthcheck:
       test: ["CMD-SHELL", "wget --spider http://127.0.0.1:3000 || exit 1"]
