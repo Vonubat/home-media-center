@@ -46,12 +46,10 @@ services:
       - ${QBITTORRENT_FORWARD_PORT}:33333/tcp
       - ${SEERR_PORT}:5055
       - ${JELLYFIN_PORT}:8096
-      - ${KAPOWARR_PORT}:5656
       - ${JELLYSTAT_PORT}:3000
       - 8920:8920 # Jellyfin optional
       - 7359:7359/udp # Jellyfin optional
       - 1900:1900/udp # Jellyfin optional
-      - ${KAVITA_PORT}:5000
       - ${HTTP_PROXY_PORT}:8888/tcp # HTTP proxy
     healthcheck:
       test:
@@ -189,22 +187,6 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8096 || exit 1"]
 
-  home-media-kavita:
-    image: lscr.io/linuxserver/kavita:latest
-    container_name: home-media-kavita
-    environment:
-      - PUID=${USER_ID}
-      - PGID=${GROUP_ID}
-      - TZ=${TIMEZONE}
-    volumes:
-      - ${KAVITA_FOLDER}:/config
-      - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
-    restart: unless-stopped
-    network_mode: service:home-media-gluetun
-    healthcheck:
-      test: ["CMD-SHELL", "curl http://localhost:5000 || exit 1"]
-
   home-media-homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: home-media-homepage
@@ -262,15 +244,3 @@ services:
     network_mode: service:home-media-gluetun
     depends_on:
       - home-media-jellystat-db
-
-  home-media-kapowarr:
-    container_name: home-media-kapowarr
-    image: mrcas/kapowarr:latest
-    network_mode: service:home-media-gluetun
-    restart: unless-stopped
-    volumes:
-      - ${KAPOWARR_FOLDER}:/app/db
-      - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
-      #- "/path/to/download_folder:/app/temp_downloads"
-      #- "/path/to/root_folder:/comics-1"

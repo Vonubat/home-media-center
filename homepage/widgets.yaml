@@ -1,12 +1,9 @@
 ---
-- resources:
-    label: System
-    cpu: true
-    memory: true
-    network: true
-
-- resources:
-    label: Drives
-    disk:
-      - /stats/configs
-      - /stats/data
+- openmeteo:
+    label: Minsk, Belarus
+    timezone: Europe/Minsk
+    latitude: 53.9045
+    longitude: 27.5615
+    units: metric
+    cache: 5
+    forecast: 3
