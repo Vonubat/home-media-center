@@ -4,11 +4,13 @@
         icon: seerr.png
         href: http://master.local:5055
         description: Seerr
+        ping: http://localhost:5055
 
     - Watch something:
         icon: jellyfin.png
         href: http://master.local:8096
         description: Jellyfin
+        ping: http://localhost:8096
 
     - Track it:
         icon: trakt.png
@@ -30,28 +32,34 @@
         icon: qbittorrent.png
         href: http://master.local:8080
         description: qBitTorrent
+        ping: http://localhost:8080
 
     - TV Shows Tracker:
         icon: sonarr.png
         href: http://master.local:8989
         description: Sonarr
+        ping: http://localhost:8989
 
     - Movies Tracker:
         icon: radarr.png
         href: http://master.local:7878
         description: Radarr
+        ping: http://localhost:7878
 
     - Subtitles Downloader:
         icon: bazarr.png
         href: http://master.local:6767
         description: Bazarr
+        ping: http://localhost:6767
 
     - Indexers setup:
         icon: prowlarr.png
         href: http://master.local:9696
         description: Prowlarr
+        ping: http://localhost:9696
 
     - Ads blocking:
         icon: adblock.png
         href: http://master.local:23002
         description: AdGuard
+        ping: http://localhost:23002

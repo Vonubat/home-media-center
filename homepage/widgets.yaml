@@ -1,4 +1,10 @@
 ---
+- search:
+    provider: [google, duckduckgo]
+    focus: true
+    showSearchSuggestions: true
+    target: _blank
+
 - openmeteo:
     label: Minsk, Belarus
     timezone: Europe/Minsk

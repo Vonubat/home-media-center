@@ -95,7 +95,6 @@ services:
     volumes:
       - ${SONARR_FOLDER}:/config
       - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     network_mode: service:home-media-gluetun
     healthcheck:
@@ -111,7 +110,6 @@ services:
     volumes:
       - ${RADARR_FOLDER}:/config
       - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     network_mode: service:home-media-gluetun
     healthcheck:
@@ -127,7 +125,6 @@ services:
     volumes:
       - ${BAZARR_FOLDER}:/config
       - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     network_mode: service:home-media-gluetun
     healthcheck:
@@ -143,7 +140,6 @@ services:
     volumes:
       - ${QBITTORRENT_FOLDER}:/config
       - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     network_mode: service:home-media-gluetun
     healthcheck:
@@ -174,7 +170,6 @@ services:
     volumes:
       - ${JELLYFIN_FOLDER}:/config
       - ${DATA_FOLDER}:/data
-      - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     network_mode: service:home-media-gluetun
     deploy:
@@ -199,6 +194,9 @@ services:
     volumes:
       - ${HOMEPAGE_FOLDER}:/app/config
       - type: bind
+        source: ./homepage/settings.yaml
+        target: /app/config/settings.yaml
+      - type: bind
         source: ./homepage/bookmarks.yaml
         target: /app/config/bookmarks.yaml
       - type: bind
@@ -209,7 +207,6 @@ services:
         target: /app/config/widgets.yaml
       - ${CONFIGS_FOLDER}:/stats/configs
       - ${DATA_FOLDER}:/stats/data
-      - ${FAST_DATA_FOLDER}:/fast-data
     restart: unless-stopped
     networks:
       - home-media-net
