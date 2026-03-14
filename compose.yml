@@ -182,6 +182,25 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8096 || exit 1"]
 
+  home-media-glances:
+    image: nicolargo/glances:latest-full
+    container_name: home-media-glances
+    pid: host
+    privileged: true
+    environment:
+      - GLANCES_OPT=-w
+      - TZ=${TIMEZONE}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/os-release:/etc/os-release:ro
+    restart: unless-stopped
+    networks:
+      - home-media-net
+    ports:
+      - ${GLANCES_PORT}:61208
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:61208/api/4/status || exit 1"]
+
   home-media-homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: home-media-homepage
@@ -189,6 +208,14 @@ services:
       HOMEPAGE_ALLOWED_HOSTS: ${HOSTNAME}
       PUID: ${USER_ID}
       PGID: ${GROUP_ID}
+      HOMEPAGE_VAR_JELLYFIN_KEY: ${JELLYFIN_API_KEY}
+      HOMEPAGE_VAR_SONARR_KEY: ${SONARR_API_KEY}
+      HOMEPAGE_VAR_RADARR_KEY: ${RADARR_API_KEY}
+      HOMEPAGE_VAR_BAZARR_KEY: ${BAZARR_API_KEY}
+      HOMEPAGE_VAR_PROWLARR_KEY: ${PROWLARR_API_KEY}
+      HOMEPAGE_VAR_SEERR_KEY: ${SEERR_API_KEY}
+      HOMEPAGE_VAR_JELLYSTAT_KEY: ${JELLYSTAT_API_KEY}
+      HOMEPAGE_VAR_QBITTORRENT_PASS: ${QBITTORRENT_PASSWORD}
     ports:
       - 80:3000
     volumes:
@@ -205,6 +232,10 @@ services:
       - type: bind
         source: ./homepage/widgets.yaml
         target: /app/config/widgets.yaml
+      - type: bind
+        source: ./homepage/docker.yaml
+        target: /app/config/docker.yaml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${CONFIGS_FOLDER}:/stats/configs
       - ${DATA_FOLDER}:/stats/data
     restart: unless-stopped

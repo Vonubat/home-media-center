@@ -5,6 +5,27 @@
     showSearchSuggestions: true
     target: _blank
 
+- glances:
+    url: http://home-media-glances:61208
+    version: 4
+    cpu: true
+    mem: true
+    cputemp: true
+    uptime: true
+    disk: /
+    label: Server
+
+- resources:
+    cpu: true
+    memory: true
+    cputemp: true
+    uptime: true
+    disk:
+      - /stats/data
+      - /stats/configs
+    refresh: 3000
+    label: Host
+
 - openmeteo:
     label: Minsk, Belarus
     timezone: Europe/Minsk

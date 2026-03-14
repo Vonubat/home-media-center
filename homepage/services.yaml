@@ -4,62 +4,152 @@
         icon: seerr.png
         href: http://master.local:5055
         description: Seerr
-        ping: http://localhost:5055
+        siteMonitor: http://home-media-gluetun:5055
+        server: local
+        container: home-media-seerr
+        showStats: true
+        widget:
+          type: seerr
+          url: http://home-media-gluetun:5055
+          key: "{{HOMEPAGE_VAR_SEERR_KEY}}"
+          fields: ["pending", "approved", "available", "processing"]
 
     - Watch something:
         icon: jellyfin.png
         href: http://master.local:8096
         description: Jellyfin
-        ping: http://localhost:8096
+        siteMonitor: http://home-media-gluetun:8096
+        server: local
+        container: home-media-jellyfin
+        showStats: true
+        widget:
+          type: jellyfin
+          url: http://home-media-gluetun:8096
+          key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
+          enableBlocks: true
+          enableNowPlaying: true
+          enableUser: true
+          showEpisodeNumber: true
+
+    - Statistics:
+        icon: jellystat.png
+        href: http://master.local:3000
+        description: Jellystat
+        siteMonitor: http://home-media-gluetun:3000
+        server: local
+        container: home-media-jellystat
+        showStats: true
+        widget:
+          type: jellystat
+          url: http://home-media-gluetun:3000
+          key: "{{HOMEPAGE_VAR_JELLYSTAT_KEY}}"
 
     - Track it:
         icon: trakt.png
         href: https://trakt.tv
         description: trakt.tv
 
-    - Trakt app:
-        icon: trakt.png
-        href: https://app.trakt.tv
-        description: app.trakt.tv
-
-    - Statistics:
-        icon: jellystat.png
-        href: http://master.local:3000
-        description: Jellystat
-
-- Management:
+- Downloads:
     - Torrents:
         icon: qbittorrent.png
         href: http://master.local:8080
-        description: qBitTorrent
-        ping: http://localhost:8080
+        description: qBittorrent
+        siteMonitor: http://home-media-gluetun:8080
+        server: local
+        container: home-media-qbittorrent
+        showStats: true
+        widget:
+          type: qbittorrent
+          url: http://home-media-gluetun:8080
+          username: admin
+          password: "{{HOMEPAGE_VAR_QBITTORRENT_PASS}}"
+          enableLeechProgress: true
 
-    - TV Shows Tracker:
+    - TV Shows:
         icon: sonarr.png
         href: http://master.local:8989
         description: Sonarr
-        ping: http://localhost:8989
+        siteMonitor: http://home-media-gluetun:8989
+        server: local
+        container: home-media-sonarr
+        showStats: true
+        widget:
+          type: sonarr
+          url: http://home-media-gluetun:8989
+          key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
+          enableQueue: true
+          fields: ["wanted", "queued", "series"]
 
-    - Movies Tracker:
+    - Movies:
         icon: radarr.png
         href: http://master.local:7878
         description: Radarr
-        ping: http://localhost:7878
+        siteMonitor: http://home-media-gluetun:7878
+        server: local
+        container: home-media-radarr
+        showStats: true
+        widget:
+          type: radarr
+          url: http://home-media-gluetun:7878
+          key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+          enableQueue: true
+          fields: ["wanted", "missing", "queued", "movies"]
 
-    - Subtitles Downloader:
+    - Subtitles:
         icon: bazarr.png
         href: http://master.local:6767
         description: Bazarr
-        ping: http://localhost:6767
+        siteMonitor: http://home-media-gluetun:6767
+        server: local
+        container: home-media-bazarr
+        showStats: true
+        widget:
+          type: bazarr
+          url: http://home-media-gluetun:6767
+          key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
+          fields: ["missingEpisodes", "missingMovies"]
 
-    - Indexers setup:
+    - Indexers:
         icon: prowlarr.png
         href: http://master.local:9696
         description: Prowlarr
-        ping: http://localhost:9696
+        siteMonitor: http://home-media-gluetun:9696
+        server: local
+        container: home-media-prowlarr
+        showStats: true
+        widget:
+          type: prowlarr
+          url: http://home-media-gluetun:9696
+          key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
+          fields: ["numberOfGrabs", "numberOfQueries", "numberOfFailGrabs", "numberOfFailQueries"]
+
+- Infrastructure:
+    - VPN Gateway:
+        icon: gluetun.png
+        href: "#"
+        description: Gluetun
+        server: local
+        container: home-media-gluetun
+        showStats: true
+
+    - Cloudflare Solver:
+        icon: cloudflare.png
+        href: "#"
+        description: FlareSolverr
+        server: local
+        container: home-media-flaresolverr
+        showStats: true
+
+    - System Monitor:
+        icon: glances.png
+        href: http://master.local:61208
+        description: Glances
+        server: local
+        container: home-media-glances
+        showStats: true
 
     - Ads blocking:
-        icon: adblock.png
+        icon: adguard-home.png
         href: http://master.local:23002
         description: AdGuard
-        ping: http://localhost:23002
+        ping: http://master.local:23002
