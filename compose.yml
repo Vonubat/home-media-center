@@ -5,9 +5,9 @@ networks:
     name: home-media-center-net
 
 services:
-  home-dockerproxy:
+  dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
-    container_name: home-dockerproxy
+    container_name: home-media-center-dockerproxy
     environment:
       - CONTAINERS=1  # Allow access to viewing containers
       - SERVICES=1    # Allow access to viewing services (Swarm)
@@ -20,10 +20,10 @@ services:
     restart: unless-stopped
 
   # This container can be transformed into a VPN-container, to enable VPN for everything.
-  home-gateway:
+  gateway:
     image: alpine:latest
     command: sleep infinity
-    container_name: home-gateway
+    container_name: home-media-center-gateway
     restart: unless-stopped
     networks:
       - home-net
@@ -44,9 +44,9 @@ services:
     healthcheck:
       test: ["CMD", "true"]
 
-  home-homepage:
+  homepage:
     image: ghcr.io/gethomepage/homepage:latest
-    container_name: home-homepage
+    container_name: home-media-center-homepage
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_HOSTNAME}
       PUID: ${USER_ID}
@@ -84,14 +84,14 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "wget --spider http://127.0.0.1:3000 || exit 1"]
 
-  home-glances:
+  glances:
     image: 'nicolargo/glances:ubuntu-latest-full'
-    container_name: home-glances
+    container_name: home-media-center-glances
     pid: host
     privileged: true
     environment:
       - GLANCES_OPT=-w
-      - DOCKER_HOST=tcp://home-dockerproxy:2375
+      - DOCKER_HOST=tcp://home-media-center-dockerproxy:2375
     ports:
       - ${GLANCES_PORT}:61208
     #volumes:
@@ -110,9 +110,9 @@ services:
               count: 1
               capabilities: [gpu]
 
-  home-adguard:
+  adguard:
     image: adguard/adguardhome:latest
-    container_name: home-adguard
+    container_name: home-media-center-adguard
     restart: unless-stopped
     ports:
       - 53:53/tcp
@@ -127,9 +127,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "wget --spider http://127.0.0.1:80 || exit 1"]
 
-  home-backdrops-sync:
+  backdrops-sync:
     image: alpine:latest
-    container_name: home-backdrops-sync
+    container_name: home-media-center-backdrops-sync
     environment:
       - JELLYFIN_API_KEY=${JELLYFIN_API_KEY}
     command: sh -c 'apk add curl jq && while true; do /backdrops-sync.sh; sleep 300; done'
@@ -137,11 +137,11 @@ services:
       - ./scripts/backdrops-sync.sh:/backdrops-sync.sh:ro
       - ${BACKDROPS_FOLDER}:/backdrops
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
 
-  home-prowlarr:
+  prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
-    container_name: home-prowlarr
+    container_name: home-media-center-prowlarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -149,26 +149,26 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/prowlarr:/config
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:9696 || exit 1"]
 
-  home-flaresolverr:
+  flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: home-flaresolverr
+    container_name: home-media-center-flaresolverr
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
       - TZ=${TIMEZONE}
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8191 || exit 1"]
 
-  home-sonarr:
+  sonarr:
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: home-sonarr
+    container_name: home-media-center-sonarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -178,13 +178,13 @@ services:
       - ${HOT_FOLDER}:/hot
       - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8989 || exit 1"]
 
-  home-radarr:
+  radarr:
     image: lscr.io/linuxserver/radarr:latest
-    container_name: home-radarr
+    container_name: home-media-center-radarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -194,13 +194,13 @@ services:
       - ${HOT_FOLDER}:/hot
       - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:7878 || exit 1"]
 
-  home-bazarr:
+  bazarr:
     image: lscr.io/linuxserver/bazarr:latest
-    container_name: home-bazarr
+    container_name: home-media-center-bazarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -210,13 +210,13 @@ services:
       - ${HOT_FOLDER}:/hot
       - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:6767 || exit 1"]
 
-  home-qbittorrent:
+  qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: home-qbittorrent
+    container_name: home-media-center-qbittorrent
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -226,27 +226,27 @@ services:
       - ${HOT_FOLDER}:/hot
       - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8080 || exit 1"]
 
-  home-seerr:
+  seerr:
     image: ghcr.io/seerr-team/seerr:latest
     init: true
-    container_name: home-seerr
+    container_name: home-media-center-seerr
     environment:
       - LOG_LEVEL=debug
       - TZ=${TIMEZONE}
     volumes:
       - ${CONFIGS_FOLDER}/seerr:/app/config
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
 
-  home-jellyfin:
+  jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
-    container_name: home-jellyfin
+    container_name: home-media-center-jellyfin
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -258,7 +258,7 @@ services:
       - ${HOT_FOLDER}:/hot
       - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     deploy:
       resources:
         reservations:
@@ -269,21 +269,21 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:8096 || exit 1"]
 
-  home-jellystat-db:
+  jellystat-db:
     image: 'postgres:15.2'
     shm_size: 1gb
-    container_name: home-jellystat-db
+    container_name: home-media-center-jellystat-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
       - ${CONFIGS_FOLDER}/jellystat/pg:/var/lib/postgresql/data
-    network_mode: service:home-gateway
+    network_mode: service:gateway
 
-  home-jellystat:
+  jellystat:
     image: 'cyfershepard/jellystat:latest'
-    container_name: home-jellystat
+    container_name: home-media-center-jellystat
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -294,6 +294,6 @@ services:
       TZ: ${TIMEZONE}
     volumes:
       - ${CONFIGS_FOLDER}/jellystat/config:/app/config
-    network_mode: service:home-gateway
+    network_mode: service:gateway
     depends_on:
-      - home-jellystat-db
+      - jellystat-db

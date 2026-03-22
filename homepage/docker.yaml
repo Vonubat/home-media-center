@@ -1,3 +1,3 @@
 local:
-  host: home-dockerproxy
+  host: home-media-center-dockerproxy
   port: 2375
