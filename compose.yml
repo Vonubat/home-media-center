@@ -1,8 +1,8 @@
-name: home
+name: home-media-center
 
 networks:
   home-net:
-    name: home-net
+    name: home-media-center-net
 
 services:
   home-dockerproxy:
