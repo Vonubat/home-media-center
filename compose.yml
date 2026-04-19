@@ -1,13 +1,13 @@
-name: home-media-center
+name: ${STACK}
 
 networks:
-  home-net:
-    name: home-media-center-net
+  local-net:
+    name: ${STACK}-net
 
 services:
   dockerproxy:
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
-    container_name: home-media-center-dockerproxy
+    container_name: ${STACK}-dockerproxy
     environment:
       - CONTAINERS=1  # Allow access to viewing containers
       - SERVICES=1    # Allow access to viewing services (Swarm)
@@ -16,17 +16,19 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - home-net
+      - local-net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:2375/version"]
 
   # This container can be transformed into a VPN-container, to enable VPN for everything.
   gateway:
     image: alpine:latest
+    container_name: ${STACK}-gateway
     command: sleep infinity
-    container_name: home-media-center-gateway
     restart: unless-stopped
     networks:
-      - home-net
+      - local-net
     ports:
       - ${SONARR_PORT}:8989
       - ${RADARR_PORT}:7878
@@ -46,11 +48,38 @@ services:
 
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
-    container_name: home-media-center-homepage
+    container_name: ${STACK}-homepage
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${HOMEPAGE_HOSTNAME}
       PUID: ${USER_ID}
       PGID: ${GROUP_ID}
+
+      HOMEPAGE_VAR_DOMAIN: ${HOMEPAGE_VAR_DOMAIN}
+      HOMEPAGE_VAR_ADGUARD_ADDRESS: ${ADGUARD_IP}
+
+      HOMEPAGE_VAR_CONTAINER_GATEWAY: ${STACK}-gateway
+      HOMEPAGE_VAR_CONTAINER_DOCKERPROXY: ${STACK}-dockerproxy
+      HOMEPAGE_VAR_CONTAINER_GLANCES: ${STACK}-glances
+      HOMEPAGE_VAR_CONTAINER_SEERR: ${STACK}-seerr
+      HOMEPAGE_VAR_CONTAINER_JELLYFIN: ${STACK}-jellyfin
+      HOMEPAGE_VAR_CONTAINER_JELLYSTAT: ${STACK}-jellystat
+      HOMEPAGE_VAR_CONTAINER_QBITTORRENT: ${STACK}-qbittorrent
+      HOMEPAGE_VAR_CONTAINER_SONARR: ${STACK}-sonarr
+      HOMEPAGE_VAR_CONTAINER_RADARR: ${STACK}-radarr
+      HOMEPAGE_VAR_CONTAINER_BAZARR: ${STACK}-bazarr
+      HOMEPAGE_VAR_CONTAINER_PROWLARR: ${STACK}-prowlarr
+      HOMEPAGE_VAR_CONTAINER_ADGUARD: ${STACK}-adguard
+
+      HOMEPAGE_VAR_PORT_SEERR: ${SEERR_PORT}
+      HOMEPAGE_VAR_PORT_JELLYFIN: ${JELLYFIN_PORT}
+      HOMEPAGE_VAR_PORT_JELLYSTAT: ${JELLYSTAT_PORT}
+      HOMEPAGE_VAR_PORT_QBIT: ${QBITTORRENT_WEBUI_PORT}
+      HOMEPAGE_VAR_PORT_SONARR: ${SONARR_PORT}
+      HOMEPAGE_VAR_PORT_RADARR: ${RADARR_PORT}
+      HOMEPAGE_VAR_PORT_BAZARR: ${BAZARR_PORT}
+      HOMEPAGE_VAR_PORT_PROWLARR: ${PROWLARR_PORT}
+      HOMEPAGE_VAR_PORT_GLANCES: ${GLANCES_PORT}
+      HOMEPAGE_VAR_PORT_ADGUARD: ${ADGUARD_WEB_PORT}
     ports:
       - ${HOMEPAGE_PORT}:3000
     volumes:
@@ -80,18 +109,18 @@ services:
       - ${HOMEPAGE_DISK_STATS_HOT}:/stats/hot
     restart: unless-stopped
     networks:
-      - home-net
+      - local-net
     healthcheck:
       test: ["CMD-SHELL", "wget --spider http://127.0.0.1:3000 || exit 1"]
 
   glances:
     image: 'nicolargo/glances:ubuntu-latest-full'
-    container_name: home-media-center-glances
+    container_name: ${STACK}-glances
     pid: host
     privileged: true
     environment:
       - GLANCES_OPT=-w
-      - DOCKER_HOST=tcp://home-media-center-dockerproxy:2375
+      - DOCKER_HOST=tcp://${STACK}-dockerproxy:2375
     ports:
       - ${GLANCES_PORT}:61208
     #volumes:
@@ -101,7 +130,7 @@ services:
       - ${HOMEPAGE_DISK_STATS_HOT}:/stats/hot
     restart: unless-stopped
     networks:
-      - home-net
+      - local-net
     deploy:
       resources:
         reservations:
@@ -109,10 +138,12 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:61208/api/4/status"]
 
   adguard:
     image: adguard/adguardhome:latest
-    container_name: home-media-center-adguard
+    container_name: ${STACK}-adguard
     restart: unless-stopped
     ports:
       - 53:53/tcp
@@ -123,13 +154,13 @@ services:
       - ${CONFIGS_FOLDER}/adguard/work:/opt/adguardhome/work
       - ${CONFIGS_FOLDER}/adguard/conf:/opt/adguardhome/conf
     networks:
-      - home-net
+      - local-net
     healthcheck:
       test: ["CMD-SHELL", "wget --spider http://127.0.0.1:80 || exit 1"]
 
   backdrops-sync:
     image: alpine:latest
-    container_name: home-media-center-backdrops-sync
+    container_name: ${STACK}-backdrops-sync
     environment:
       - JELLYFIN_API_KEY=${JELLYFIN_API_KEY}
     command: sh -c 'apk add curl jq && while true; do /backdrops-sync.sh; sleep 300; done'
@@ -138,10 +169,12 @@ services:
       - ${BACKDROPS_FOLDER}:/backdrops
     restart: unless-stopped
     network_mode: service:gateway
+    healthcheck:
+      test: ["CMD", "true"]
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
-    container_name: home-media-center-prowlarr
+    container_name: ${STACK}-prowlarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -155,7 +188,7 @@ services:
 
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: home-media-center-flaresolverr
+    container_name: ${STACK}-flaresolverr
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
@@ -168,7 +201,7 @@ services:
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
-    container_name: home-media-center-sonarr
+    container_name: ${STACK}-sonarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -176,7 +209,6 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/sonarr:/config
       - ${HOT_FOLDER}:/hot
-      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -184,7 +216,7 @@ services:
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
-    container_name: home-media-center-radarr
+    container_name: ${STACK}-radarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -192,7 +224,6 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/radarr:/config
       - ${HOT_FOLDER}:/hot
-      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -200,7 +231,7 @@ services:
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
-    container_name: home-media-center-bazarr
+    container_name: ${STACK}-bazarr
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -208,7 +239,6 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/bazarr:/config
       - ${HOT_FOLDER}:/hot
-      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -216,7 +246,7 @@ services:
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
-    container_name: home-media-center-qbittorrent
+    container_name: ${STACK}-qbittorrent
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -224,7 +254,6 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/qbittorrent:/config
       - ${HOT_FOLDER}:/hot
-      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -232,8 +261,8 @@ services:
 
   seerr:
     image: ghcr.io/seerr-team/seerr:latest
+    container_name: ${STACK}-seerr
     init: true
-    container_name: home-media-center-seerr
     environment:
       - LOG_LEVEL=debug
       - TZ=${TIMEZONE}
@@ -246,7 +275,7 @@ services:
 
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
-    container_name: home-media-center-jellyfin
+    container_name: ${STACK}-jellyfin
     environment:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
@@ -256,7 +285,6 @@ services:
       - ${CONFIGS_FOLDER}/jellyfin:/config
       - ${CACHE_FOLDER}/jellyfin:/cache
       - ${HOT_FOLDER}:/hot
-      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     deploy:
@@ -271,8 +299,8 @@ services:
 
   jellystat-db:
     image: 'postgres:15.2'
+    container_name: ${STACK}-jellystat-db
     shm_size: 1gb
-    container_name: home-media-center-jellystat-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -280,10 +308,12 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/jellystat/pg:/var/lib/postgresql/data
     network_mode: service:gateway
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
 
   jellystat:
     image: 'cyfershepard/jellystat:latest'
-    container_name: home-media-center-jellystat
+    container_name: ${STACK}-jellystat
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres

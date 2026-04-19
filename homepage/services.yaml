@@ -2,19 +2,19 @@
 - Media:
     - Request something:
         icon: seerr.png
-        href: http://master.local:5055
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_SEERR}}
         description: Seerr
-        siteMonitor: http://home-media-center-gateway:5055
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_SEERR}}
         server: local
-        container: home-media-center-seerr
+        container: {{HOMEPAGE_VAR_CONTAINER_SEERR}}
 
     - Watch something:
         icon: jellyfin.png
-        href: http://master.local:8096
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_JELLYFIN}}
         description: Jellyfin
-        siteMonitor: http://home-media-center-gateway:8096
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_JELLYFIN}}
         server: local
-        container: home-media-center-jellyfin
+        container: {{HOMEPAGE_VAR_CONTAINER_JELLYFIN}}
 
     - Trakt app:
         icon: trakt.png
@@ -24,70 +24,70 @@
 
     - Statistics:
         icon: jellystat.png
-        href: http://master.local:3000
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_JELLYSTAT}}
         description: Jellystat
-        siteMonitor: http://home-media-center-gateway:3000
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_JELLYSTAT}}
         server: local
-        container: home-media-center-jellystat
+        container: {{HOMEPAGE_VAR_CONTAINER_JELLYSTAT}}
 
 - Management:
     - Torrents:
         icon: qbittorrent.png
-        href: http://master.local:8080
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_QBIT}}
         description: qBitTorrent
-        siteMonitor: http://home-media-center-gateway:8080
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_QBIT}}
         showStats: true
         server: local
-        container: home-media-center-qbittorrent
+        container: "{{HOMEPAGE_VAR_CONTAINER_QBITTORRENT}}"
         widget:
           type: qbittorrent
-          url: http://home-media-center-gateway:8080
+          url: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_QBIT}}
 
     - TV Shows Tracker:
         icon: sonarr.png
-        href: http://master.local:8989
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_SONARR}}
         description: Sonarr
-        siteMonitor: http://home-media-center-gateway:8989
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_SONARR}}
         server: local
-        container: home-media-center-sonarr
+        container: {{HOMEPAGE_VAR_CONTAINER_SONARR}}
 
     - Movies Tracker:
         icon: radarr.png
-        href: http://master.local:7878
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_RADARR}}
         description: Radarr
-        siteMonitor: http://home-media-center-gateway:7878
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_RADARR}}
         server: local
-        container: home-media-center-radarr
+        container: {{HOMEPAGE_VAR_CONTAINER_RADARR}}
 
     - Subtitles Downloader:
         icon: bazarr.png
-        href: http://master.local:6767
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_BAZARR}}
         description: Bazarr
-        siteMonitor: http://home-media-center-gateway:6767
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_BAZARR}}
         server: local
-        container: home-media-center-bazarr
+        container: {{HOMEPAGE_VAR_CONTAINER_BAZARR}}
 
     - Indexers setup:
         icon: prowlarr.png
-        href: http://master.local:9696
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_PROWLARR}}
         description: Prowlarr
-        siteMonitor: http://home-media-center-gateway:9696
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_PROWLARR}}
         server: local
-        container: home-media-center-prowlarr
+        container: {{HOMEPAGE_VAR_CONTAINER_PROWLARR}}
 
 - System:
     - System state (WSL2):
         icon: glances.png
-        href: http://master.local:61208
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_GLANCES}}
         description: Glances
-        siteMonitor: http://home-media-center-glances:61208
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GLANCES}}:{{HOMEPAGE_VAR_PORT_GLANCES}}
         server: local
-        container: home-media-center-glances
+        container: {{HOMEPAGE_VAR_CONTAINER_GLANCES}}
 
     - Ads blocking:
         icon: adblock.png
-        href: http://master.local:23002
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_ADGUARD}}
         description: AdGuard
-        siteMonitor: http://home-media-center-adguard:80/login.html
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_ADGUARD}}:80/login.html
         server: local
-        container: home-media-center-adguard
+        container: {{HOMEPAGE_VAR_CONTAINER_ADGUARD}}
