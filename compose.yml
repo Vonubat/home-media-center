@@ -55,7 +55,6 @@ services:
       PGID: ${GROUP_ID}
 
       HOMEPAGE_VAR_DOMAIN: ${HOMEPAGE_VAR_DOMAIN}
-      HOMEPAGE_VAR_ADGUARD_ADDRESS: ${ADGUARD_IP}
 
       HOMEPAGE_VAR_CONTAINER_GATEWAY: ${STACK}-gateway
       HOMEPAGE_VAR_CONTAINER_DOCKERPROXY: ${STACK}-dockerproxy
@@ -209,6 +208,7 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/sonarr:/config
       - ${HOT_FOLDER}:/hot
+      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -224,6 +224,7 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/radarr:/config
       - ${HOT_FOLDER}:/hot
+      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -239,6 +240,7 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/bazarr:/config
       - ${HOT_FOLDER}:/hot
+      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -254,6 +256,7 @@ services:
     volumes:
       - ${CONFIGS_FOLDER}/qbittorrent:/config
       - ${HOT_FOLDER}:/hot
+      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     healthcheck:
@@ -285,6 +288,7 @@ services:
       - ${CONFIGS_FOLDER}/jellyfin:/config
       - ${CACHE_FOLDER}/jellyfin:/cache
       - ${HOT_FOLDER}:/hot
+      - ${HOT_FOLDER}:/data # For compatibility.
     restart: unless-stopped
     network_mode: service:gateway
     deploy:
