@@ -26,7 +26,8 @@
         icon: jellystat.png
         href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_JELLYSTAT}}
         description: Jellystat
-        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_JELLYSTAT}}
+        #  Jellystat exposes hardcoded 3000 port
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:3000
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_JELLYSTAT}}
 
