@@ -16,9 +16,9 @@ mkdir -p $CONFIGS_FOLDER/{adguard,seerr}
 mkdir -p $BACKDROPS_FOLDER
 mkdir -p $CACHE_FOLDER/jellyfin
 mkdir -p $COLD_FOLDER/downloads/content
-mkdir -p $COLD_FOLDER/media/{shows,movies,comics}
+mkdir -p $COLD_FOLDER/media/{shows,movies}
 mkdir -p $HOT_FOLDER/downloads/content
-mkdir -p $HOT_FOLDER/media/{shows,movies,comics}
+mkdir -p $HOT_FOLDER/media/{shows,movies}
 
 set -a
 source .env

@@ -15,7 +15,7 @@ Whole **/master** folder is mounted as a volume to each container. This is to av
 - **master/{hot,cold}/downloads** - downloads folder for your torrent tracker. It can be HDD, but it might slow it down with a lot of random writes/reads, so usually it's better to use an SSD if you can afford a "buffer" SSD just for downloads
   - **master/{hot,cold}/downloads/content** - download to this folder in order for it to appear in the Jellyfin
 - **master/{hot,cold}/media** - media files
-  - `/{movies, shows, comics}`
+  - `/{movies, shows}`
 - **master/backdrops** - this is a special folder where we store screensaver backdrops (automatically retrieved from Jellyfin)
 
 The reason for having a separate `media-cold` and `media-hot` folders is to know for sure where are the files that are stored on the SSD, and where are the files that are stored on the HDD. If you only use SSD, or only use HDD - just leave the other folder unused. Keep it for future in case you want to expand.
