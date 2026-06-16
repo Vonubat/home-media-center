@@ -67,7 +67,6 @@ services:
       HOMEPAGE_VAR_CONTAINER_RADARR: ${STACK}-radarr
       HOMEPAGE_VAR_CONTAINER_BAZARR: ${STACK}-bazarr
       HOMEPAGE_VAR_CONTAINER_PROWLARR: ${STACK}-prowlarr
-      HOMEPAGE_VAR_CONTAINER_ADGUARD: ${STACK}-adguard
 
       HOMEPAGE_VAR_PORT_SEERR: ${SEERR_PORT}
       HOMEPAGE_VAR_PORT_JELLYFIN: ${JELLYFIN_PORT}
@@ -78,7 +77,6 @@ services:
       HOMEPAGE_VAR_PORT_BAZARR: ${BAZARR_PORT}
       HOMEPAGE_VAR_PORT_PROWLARR: ${PROWLARR_PORT}
       HOMEPAGE_VAR_PORT_GLANCES: ${GLANCES_PORT}
-      HOMEPAGE_VAR_PORT_ADGUARD: ${ADGUARD_WEB_PORT}
     ports:
       - ${HOMEPAGE_PORT}:3000
     volumes:
@@ -139,23 +137,6 @@ services:
               capabilities: [gpu]
     healthcheck:
       test: ["CMD", "curl", "-sf", "http://localhost:61208/api/4/status"]
-
-  adguard:
-    image: adguard/adguardhome:latest
-    container_name: ${STACK}-adguard
-    restart: unless-stopped
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - ${ADGUARD_SETUP_PORT}:3000/tcp
-      - ${ADGUARD_WEB_PORT}:80/tcp
-    volumes:
-      - ${CONFIGS_FOLDER}/adguard/work:/opt/adguardhome/work
-      - ${CONFIGS_FOLDER}/adguard/conf:/opt/adguardhome/conf
-    networks:
-      - local-net
-    healthcheck:
-      test: ["CMD-SHELL", "wget --spider http://127.0.0.1:80 || exit 1"]
 
   backdrops-sync:
     image: alpine:latest

@@ -31,7 +31,7 @@
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_JELLYSTAT}}
 
-- Management:
+- Management & System:
     - Torrents:
         icon: qbittorrent.png
         href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_QBIT}}
@@ -76,7 +76,6 @@
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_PROWLARR}}
 
-- System:
     - System state (WSL2):
         icon: glances.png
         href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_GLANCES}}
@@ -84,11 +83,3 @@
         siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GLANCES}}:{{HOMEPAGE_VAR_PORT_GLANCES}}
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_GLANCES}}
-
-    - Ads blocking:
-        icon: adblock.png
-        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_ADGUARD}}
-        description: AdGuard
-        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_ADGUARD}}:80/login.html
-        server: local
-        container: {{HOMEPAGE_VAR_CONTAINER_ADGUARD}}

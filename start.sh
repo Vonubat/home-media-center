@@ -12,7 +12,7 @@ if [[ -z "$TIMEZONE" ]]; then
   echo "TIMEZONE=$timezone" >> .secrets
 fi
 
-mkdir -p $CONFIGS_FOLDER/{adguard,seerr}
+mkdir -p $CONFIGS_FOLDER/{seerr}
 mkdir -p $BACKDROPS_FOLDER
 mkdir -p $CACHE_FOLDER/jellyfin
 mkdir -p $COLD_FOLDER/downloads/content
