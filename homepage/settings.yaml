@@ -19,10 +19,6 @@ layout:
     tab: Services
     style: column
 
-  Management & System:
-    tab: Services
-    style: column
-
   System:
     tab: Services
     style: column

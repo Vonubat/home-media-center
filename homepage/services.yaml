@@ -31,7 +31,7 @@
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_JELLYSTAT}}
 
-- Management & System:
+- System:
     - Torrents:
         icon: qbittorrent.png
         href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_QBIT}}
