@@ -28,3 +28,33 @@ layout:
 
   Services:
     tab: Bookmarks
+
+pwa:
+  id: /
+  icons:
+    - src: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jellyfin.png
+      type: image/png
+      sizes: 512x512
+
+  screenshots:
+    - src: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jellyfin.png
+      sizes: 512x512
+      form_factor: wide
+      label: Home Media Center - Desktop
+    - src: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jellyfin.png
+      sizes: 512x512
+      label: Home Media Center - Mobile
+
+  shortcuts:
+    - name: Media
+      url: "/#Media"
+      icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jellyfin.png
+    - name: System
+      url: "/#System"
+      icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/sonarr.png
+    - name: Personal
+      url: "/#Personal"
+      icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/github.png
+    - name: Services
+      url: "/#Services"
+      icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/router.png
