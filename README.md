@@ -87,7 +87,7 @@ Just run `./update.sh`.
   - RAM limit: 12288 (12 Gb)
   - Recheck torrents on completion (better integrity)
 
-### Set up: Sonarr, Radarr
+### Set up Sonarr & Radarr
 
 - Authentication method: basic (admin, qwerty)
 - Authentication required: Disable for localhost
@@ -227,3 +227,19 @@ Other Plugins (manual installation)
 
 - Sign up / connect to Jellyfin using localhost/apikey (create new key).
 - Set up external url for jellyfin
+
+### Set up Samba (Windows Notes)
+
+The Windows service for sharing network drives occupies port 445, which causes a port collision with the `backdrops-share` service. To resolve this, we need to disable the Windows service via PowerShell.
+
+```powershell
+Set-Service -Name LanmanServer -StartupType Disabled
+Stop-Service -Name LanmanServer -Force
+sc.exe stop srv2
+sc.exe stop srvnet
+```
+
+Next, map a network drive:
+
+- **Path:** `\\<static-ip-of-pc>\backdrops`
+- **Password:** taken from the `BACKDROPS_SHARE_PASSWORD` environment variable

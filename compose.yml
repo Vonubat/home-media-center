@@ -43,6 +43,7 @@ services:
       - 8920:8920     # Jellyfin optional
       - 7359:7359/udp # Jellyfin optional
       - 1900:1900/udp # Jellyfin optional
+      - 445:445 #Backdrops share samba protocol
     healthcheck:
       test: ["CMD", "true"]
 
@@ -151,6 +152,20 @@ services:
     network_mode: service:gateway
     healthcheck:
       test: ["CMD", "true"]
+
+  backdrops-share:
+    image: dockurr/samba
+    container_name: ${STACK}-backdrops-share
+    restart: unless-stopped
+    volumes:
+      - ${BACKDROPS_FOLDER}:/storage
+    network_mode: service:gateway
+    environment:
+      NAME: backdrops
+      USER: ${BACKDROPS_SHARE_USER}
+      PASS: ${BACKDROPS_SHARE_PASSWORD}
+      UID: 1000
+      GID: 1000
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
