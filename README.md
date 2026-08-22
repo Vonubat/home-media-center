@@ -37,7 +37,7 @@ You do not need to configure anything else in this file unless you want to.
 
 2. Start the server:
 
-Use `./start.sh` command, or `./start.sh --timezone Asia/Tbilisi` if you want to specify a particular timezone. By default it will remain `Etc/UTC`.
+Use `./scripts/start.sh` command, or `./scripts/start.sh --timezone Asia/Tbilisi` if you want to specify a particular timezone. By default it will remain `Etc/UTC`.
 
 Enter your PIA credentials when prompted, they will be stored in the `.secrets` file in this folder.
 
@@ -45,7 +45,7 @@ Enter your PIA credentials when prompted, they will be stored in the `.secrets` 
 
 ## How to update / upgrade
 
-Just run `./update.sh`.
+Just run `./scripts/update.sh`.
 
 ## How to configure
 
