@@ -1,0 +1,57 @@
+.clock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 14rem;
+  flex: 0 0 auto;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.clock[hidden] {
+  display: none;
+}
+
+.clock__time {
+  font-size: 2.75rem;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  color: #e4c44a;
+  min-height: 1.05em;
+}
+
+.clock__date {
+  margin-top: 0.2rem;
+  font-size: 1.15rem;
+  color: #e4c44a;
+  opacity: 0.92;
+  min-height: 1.2em;
+}
+
+@media (max-width: 1100px) {
+  .clock {
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .clock__time {
+    font-size: 2.15rem;
+  }
+
+  .clock__date {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .clock__time {
+    font-size: 1.85rem;
+  }
+
+  .clock__date {
+    font-size: 0.88rem;
+  }
+}

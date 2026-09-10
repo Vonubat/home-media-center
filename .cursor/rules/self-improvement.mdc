@@ -16,5 +16,5 @@ Session checklists use the native todo list, not a markdown todo file.
 ## After any user correction
 
 - Append the pattern to `.cursor/lessons.md` immediately.
-- Write a rule if the same mistake should be blocked next time.
+- Do not add a `.cursor/rules` file for operational how-to knowledge. Rules are essential constraints only (safety, never-do, always-apply workflow).
 - Iterate until that class of mistake stops repeating.

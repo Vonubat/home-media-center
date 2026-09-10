@@ -14,6 +14,26 @@ hideVersion: true
 hideGroupTitles: true
 #cardBlur: xs
 
+clockWeather:
+  clockEnabled: {{HOMEPAGE_VAR_CLOCK_ENABLED}}
+  clockShowSeconds: {{HOMEPAGE_VAR_CLOCK_SHOW_SECONDS}}
+  clockHour12: {{HOMEPAGE_VAR_CLOCK_HOUR12}}
+  dateEnabled: {{HOMEPAGE_VAR_DATE_ENABLED}}
+  weatherEnabled: {{HOMEPAGE_VAR_WEATHER_ENABLED}}
+  weatherCity: "{{HOMEPAGE_VAR_WEATHER_CITY}}"
+  weatherUnits: "{{HOMEPAGE_VAR_WEATHER_UNITS}}"
+  weatherForecastDays: {{HOMEPAGE_VAR_WEATHER_FORECAST_DAYS}}
+  datetimeTimezone: "{{HOMEPAGE_VAR_DATETIME_TIMEZONE}}"
+  weatherLatitude: "{{HOMEPAGE_VAR_WEATHER_LATITUDE}}"
+  weatherLongitude: "{{HOMEPAGE_VAR_WEATHER_LONGITUDE}}"
+
+disks:
+  volumes:
+    - mount: /stats/hot
+      hostPath: "{{HOMEPAGE_VAR_DISK_STATS_HOT}}"
+    - mount: /stats/cold
+      hostPath: "{{HOMEPAGE_VAR_DISK_STATS_COLD}}"
+
 layout:
   Media:
     tab: Services

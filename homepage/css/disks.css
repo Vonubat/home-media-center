@@ -1,0 +1,88 @@
+#style {
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#disks {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.6rem;
+  min-height: 3.4rem;
+  margin-right: auto;
+}
+
+#disks[hidden] {
+  display: none;
+}
+
+.disk {
+  min-width: 9.5rem;
+  padding: 0.45rem 0.7rem 0.5rem;
+  border-radius: 0.375rem;
+  background: rgb(16 16 16 / 0.82);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 0.18);
+  color: #f4f7fb;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+.disk__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.disk__id {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.15rem;
+}
+
+.disk__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+}
+
+.disk__letter {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  min-width: 0.7em;
+}
+
+.disk__pct {
+  font-size: 0.95rem;
+  color: #e8edf3;
+}
+
+.disk__bar {
+  height: 0.28rem;
+  margin: 0.35rem 0 0.4rem;
+  border-radius: 999px;
+  background: rgba(244, 247, 251, 0.16);
+  overflow: hidden;
+}
+
+.disk__bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #e4c44a;
+}
+
+.disk__amount {
+  font-size: 0.72rem;
+  color: #d0d7e0;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .disk {
+    min-width: 7.25rem;
+    padding: 0.35rem 0.55rem 0.4rem;
+  }
+}

@@ -33,6 +33,23 @@ Later on, when we need to store it for "cold storage", or scheduled with a scrip
 - `MASTER_FOLDER` - the folder where everything will be stored, you can use symlinks inside it to forward different things into different places if you want
 - `HOSTNAME` - list of allowed hostnames for Homepage service: for example `localhost,ivanpc.local` (where ivanpc is your PC domain name)
 
+Homepage clock and weather:
+
+```
+# ===== Homepage clock + weather =====
+HOMEPAGE_CLOCK_ENABLED=true
+HOMEPAGE_CLOCK_SHOW_SECONDS=true
+HOMEPAGE_CLOCK_HOUR12=false
+HOMEPAGE_DATE_ENABLED=true
+HOMEPAGE_WEATHER_ENABLED=true
+HOMEPAGE_WEATHER_CITY=Minsk
+HOMEPAGE_WEATHER_UNITS=metric
+HOMEPAGE_WEATHER_FORECAST_DAYS=5
+HOMEPAGE_DATETIME_TIMEZONE=Europe/Minsk
+```
+
+City is enough for weather (Open-Meteo geocodes it). Units are `metric` or `imperial`. `HOMEPAGE_WEATHER_FORECAST_DAYS` is **1–7** (Open-Meteo daily range); the default is **5**. Invalid or empty values fall back to 5; values above 7 are clamped to 7. After changing these, recreate the homepage container so interpolation refreshes (`docker compose --env-file .env --env-file .secrets -f compose.yml up -d --force-recreate homepage`).
+
 You do not need to configure anything else in this file unless you want to.
 
 2. Start the server:

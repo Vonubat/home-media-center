@@ -1,0 +1,22 @@
+:root,
+:root[data-theme="dark"] {
+  --color-900: 0 0 0 !important;
+  --color-800: 10 10 10 !important;
+  --color-700: 20 20 20 !important;
+}
+
+@keyframes skel {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.skel {
+  background: rgba(244, 247, 251, 0.22);
+  border-radius: 0.35rem;
+  animation: skel 1.2s ease-in-out infinite;
+}
