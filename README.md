@@ -211,10 +211,17 @@ Other Plugins (manual installation)
 
 - IMPORTANT PLUGINS
   - Trakt.tv (listed above)
-  - Moonfin: configure integration with Seerr
-    - Deps: https://www.iamparadox.dev/jellyfin/plugins/manifest.json, file transformations plugin
-    - Restart Jellyfin
-    - Moonfin: https://raw.githubusercontent.com/Moonfin-Client/Plugin/refs/heads/master/manifest.json
+  - Moonfin (Moonbase plugin): [Moonfin-Client/Plugin](https://github.com/Moonfin-Client/Plugin)
+    - Dashboard > Administration > Plugins > Repositories > Add:
+      - Name: Moonbase
+      - URL: https://raw.githubusercontent.com/Moonfin-Client/Plugin/refs/heads/master/manifest.json
+    - Catalog > Moonbase > Install, then restart Jellyfin
+    - Optional header button in stock Jellyfin Web (next to SyncPlay):
+      - Add File Transformation repo: https://www.iamparadox.dev/jellyfin/plugins/manifest.json
+      - Catalog > File Transformation > Install, restart Jellyfin, force-refresh the browser
+    - Access the Moonfin web app at http://master.local:8096/Moonfin/Web/ (same host/port as Jellyfin)
+    - If the page is blank after a fresh install: Dashboard > Scheduled Tasks > run **Moonfin Startup**, then refresh
+    - Configure Seerr integration in Dashboard > Plugins > Moonbase
 
 ### Set up Seerr
 

@@ -8,11 +8,19 @@
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_SEERR}}
 
-    - Watch something:
+    - Watch with Jellyfin:
         icon: jellyfin.png
         href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_JELLYFIN}}
         description: Jellyfin
         siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_JELLYFIN}}
+        server: local
+        container: {{HOMEPAGE_VAR_CONTAINER_JELLYFIN}}
+
+    - Watch with Moonfin:
+        icon: https://raw.githubusercontent.com/Moonfin-Client/Moonfin-Core/main/assets/icons/moonfin.png
+        href: http://{{HOMEPAGE_VAR_DOMAIN}}:{{HOMEPAGE_VAR_PORT_JELLYFIN}}/Moonfin/Web/
+        description: Moonfin
+        siteMonitor: http://{{HOMEPAGE_VAR_CONTAINER_GATEWAY}}:{{HOMEPAGE_VAR_PORT_JELLYFIN}}/Moonfin/Web/
         server: local
         container: {{HOMEPAGE_VAR_CONTAINER_JELLYFIN}}
 
