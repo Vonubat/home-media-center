@@ -1,7 +1,12 @@
 import { Widget } from './widget.js';
+import { StorageAdapter } from './storage.js';
 import { conditionText, iconUrl, metaIconUrl, WMO_CODES } from './weather-codes.js';
 
 const REFRESH_MS = 5 * 60 * 1000;
+
+const weatherStorage = new StorageAdapter(localStorage, {
+  weather: 'homepage.weather.v1',
+});
 
 export class WeatherWidget extends Widget {
   start() {
@@ -286,12 +291,60 @@ export class WeatherWidget extends Widget {
         timezone: this.config.datetimeTimezone,
       };
     }
+    const cached = this.#readCache();
+    if (cached?.location) {
+      return {
+        latitude: cached.location.latitude,
+        longitude: cached.location.longitude,
+        timezone: this.config.datetimeTimezone || cached.location.timezone,
+      };
+    }
     const geo = await this.#geocodeCity(this.config.weatherCity);
     return {
       latitude: geo.latitude,
       longitude: geo.longitude,
       timezone: this.config.datetimeTimezone || geo.timezone,
     };
+  }
+
+  #fingerprint() {
+    return [
+      this.config.weatherCity,
+      this.config.weatherLatitude,
+      this.config.weatherLongitude,
+      this.config.weatherUnits,
+      this.config.weatherForecastDays,
+    ].join('|');
+  }
+
+  #readCache() {
+    const cached = weatherStorage.get('weather');
+    if (!cached || typeof cached !== 'object') return null;
+    if (cached.fingerprint !== this.#fingerprint()) return null;
+    if (typeof cached.fetchedAt !== 'number' || !cached.data?.current || !cached.data?.daily) {
+      return null;
+    }
+    return cached;
+  }
+
+  #isFresh(cached) {
+    return Date.now() - cached.fetchedAt < REFRESH_MS;
+  }
+
+  #applyCache(cached) {
+    if (cached.location?.timezone) {
+      this.renderOptions.timezone = cached.location.timezone;
+    }
+    this.html(this.#renderWeatherHtml(cached.data, this.renderOptions));
+  }
+
+  #writeCache(location, data) {
+    weatherStorage.set('weather', {
+      fetchedAt: Date.now(),
+      fingerprint: this.#fingerprint(),
+      location,
+      data,
+    });
   }
 
   async #refresh() {
@@ -309,20 +362,37 @@ export class WeatherWidget extends Widget {
       return;
     }
 
-    const loc = await this.#location();
-    this.renderOptions.timezone = loc.timezone;
-    const res = await fetch(
-      this.#weatherUrl({
-        latitude: loc.latitude,
-        longitude: loc.longitude,
-        timezone: loc.timezone,
-        units: this.config.weatherUnits,
-        forecastDays: this.config.weatherForecastDays,
-      }),
-    );
-    if (!res.ok) {
-      throw new Error(`open-meteo ${res.status}`);
+    const cached = this.#readCache();
+    if (cached && this.#isFresh(cached)) {
+      this.#applyCache(cached);
+      return;
     }
-    this.html(this.#renderWeatherHtml(await res.json(), this.renderOptions));
+
+    try {
+      const loc = await this.#location();
+      this.renderOptions.timezone = loc.timezone;
+      const res = await fetch(
+        this.#weatherUrl({
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+          timezone: loc.timezone,
+          units: this.config.weatherUnits,
+          forecastDays: this.config.weatherForecastDays,
+        }),
+      );
+      if (!res.ok) {
+        throw new Error(`open-meteo ${res.status}`);
+      }
+      const data = await res.json();
+      this.#writeCache(loc, data);
+      this.html(this.#renderWeatherHtml(data, this.renderOptions));
+    } catch (error) {
+      if (cached) {
+        console.warn('weather: using cached forecast', error);
+        this.#applyCache(cached);
+        return;
+      }
+      throw error;
+    }
   }
 }
