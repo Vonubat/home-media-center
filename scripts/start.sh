@@ -23,6 +23,8 @@ mkdir -p $COLD_FOLDER/downloads/content
 mkdir -p $COLD_FOLDER/media/{shows,movies}
 mkdir -p $HOT_FOLDER/downloads/content
 mkdir -p $HOT_FOLDER/media/{shows,movies}
+mkdir -p "$HOT_FOLDER/media/games/Mega Drive"
+mkdir -p "$HOT_FOLDER/media/games/PlayStation"
 
 set -a
 source .env
