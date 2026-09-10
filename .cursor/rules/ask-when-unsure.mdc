@@ -1,0 +1,43 @@
+---
+description: Ask the user instead of guessing when requirements or environment details are ambiguous
+alwaysApply: true
+---
+
+# Ask when unsure
+
+Guessing wastes a review cycle. When a decision would change the shape of the
+result, ask before building.
+
+## Ask when
+
+- Requirements allow several materially different implementations.
+- Credentials, hosts, realms, tenants or schemas are unclear or do not work as described.
+- Something the user stated does not match what you observe. Report the mismatch
+  with evidence and ask, rather than silently working around it.
+- Scope is unclear: one iteration or several.
+
+## How to ask
+
+- Use the AskQuestion tool rather than listing options in prose.
+- Ask one or two decisive questions at a time, not a questionnaire.
+- Do a quick read of the code or a quick query first so the options you offer are
+  concrete and informed.
+- Recommend an option and say why.
+
+## Do not ask when
+
+- The answer is discoverable from the codebase or a read-only query. Look it up.
+- The choice is trivial or easily reversible. Pick a sensible default, state it,
+  and move on.
+
+## Example
+
+```
+# BAD - guesses, then reports a broken result
+Assumes 2-letter country codes, seeds data, reports success.
+
+# GOOD - checks, then asks only what code cannot answer
+Queries the country table, finds 3-letter codes with an officeExists flag,
+uses them; then asks the user which tenant schema to target, since all four
+local schemas hold real-looking data.
+```

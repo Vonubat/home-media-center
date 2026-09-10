@@ -1,0 +1,43 @@
+---
+description: Never report work as done before it has been executed and verified
+alwaysApply: true
+---
+
+# Verify before reporting
+
+Writing code is not finishing. Do not tell the user an implementation is complete
+until it has actually run and been checked against the real system.
+
+## Required before reporting
+
+1. Verify assumptions against the real system first, not from memory or from the
+   model source alone. Column names, codes and constraints must be confirmed
+   with a query before code depends on them.
+2. Execute the code. A file that has never run is not an implementation.
+3. Check the result at the data layer (SQL assertions: row counts, referential
+   integrity, no orphans).
+4. Check the result through the application layer the user actually uses
+   (API via an integration test, and the UI via the browser).
+5. Only then report, stating explicitly what was verified and how.
+
+## Reporting rules
+
+- Say what you actually ran and observed. Never imply verification that did not happen.
+- If a stage could not be verified, say so plainly and explain why.
+- Report side effects you caused on shared state, and restore them.
+
+## Example
+
+```
+# BAD - never executed, assumed column names
+"Created the seed script. It inserts employees with validFrom/validTo."
+
+# GOOD
+"Seeded 15 employees into west2. Verified: 11 SQL integrity checks pass,
+9 integration tests pass through the OData layer, and the team renders in
+the UI with resolved level/role/location (screenshot below).
+Note: the columns are datefrom/dateto, not validfrom/validto - confirmed
+against information_schema before writing the insert."
+```
+
+## In this project specifically

@@ -1,0 +1,25 @@
+---
+description: Plan first, use subagents, stop and re-plan when stuck
+alwaysApply: true
+---
+
+# Workflow orchestration
+
+## Plan first
+
+- Enter plan mode for any non-trivial task (3+ steps or architectural decisions).
+- Use plan mode for verification steps, not just building.
+- Write a detailed spec before implementing to reduce ambiguity.
+- If something goes sideways, STOP and re-plan immediately. Do not keep pushing.
+
+## Subagents
+
+- Use subagents to keep the main context window clean.
+- Offload research, exploration, and parallel analysis to subagents.
+- One task per subagent for focused execution.
+
+## Verification before done
+
+- Never mark a task complete without proving it works.
+- Follow `.cursor/rules/verify-before-reporting.mdc`.
+- Ask: "Would a staff engineer approve this?"

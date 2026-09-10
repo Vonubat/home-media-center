@@ -1,0 +1,20 @@
+---
+description: Capture user corrections in lessons.md and review them at session start
+alwaysApply: true
+---
+
+# Self-improvement loop
+
+Durable memory lives in `.cursor/lessons.md` (workspace-shared, not per-repo).
+Session checklists use the native todo list, not a markdown todo file.
+
+## At session start
+
+- Skim `.cursor/lessons.md` for patterns relevant to this project or task.
+- Apply matching lessons without waiting to be reminded.
+
+## After any user correction
+
+- Append the pattern to `.cursor/lessons.md` immediately.
+- Write a rule if the same mistake should be blocked next time.
+- Iterate until that class of mistake stops repeating.
