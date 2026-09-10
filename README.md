@@ -15,8 +15,7 @@ Whole **/master** folder is mounted as a volume to each container. This is to av
 - **master/{hot,cold}/downloads** - downloads folder for your torrent tracker. It can be HDD, but it might slow it down with a lot of random writes/reads, so usually it's better to use an SSD if you can afford a "buffer" SSD just for downloads
   - **master/{hot,cold}/downloads/content** - download to this folder in order for it to appear in the Jellyfin
 - **master/{hot,cold}/media** - media files
-  - `/{movies, shows, games}`
-  - Games are served from **hot** (`/data/media/games` in Jellyfin). Moonfin Retro Games reads that folder on disk; copy ROMs there.
+  - `/{movies, shows}`
 - **master/backdrops** - this is a special folder where we store screensaver backdrops (automatically retrieved from Jellyfin)
 
 The reason for having a separate `media-cold` and `media-hot` folders is to know for sure where are the files that are stored on the SSD, and where are the files that are stored on the HDD. If you only use SSD, or only use HDD - just leave the other folder unused. Keep it for future in case you want to expand.
@@ -151,7 +150,6 @@ Enable: sonarr, radarr
 - Library:
   - Movies: /data/media/movies
   - Shows: /data/media/shows
-  - Games: /data/media/games (mixed; Moonfin reads ROMs from disk, not as movies)
   - Home Vid/Photos: /data/downloads/content
   - Consider adding dedicated F1 library / any thematic libraries
 - Leave checked allow remote connections
@@ -224,14 +222,6 @@ Other Plugins (manual installation)
     - Access the Moonfin web app at http://master.local:8096/Moonfin/Web/ (same host/port as Jellyfin)
     - If the page is blank after a fresh install: Dashboard > Scheduled Tasks > run **Moonfin Startup**, then refresh
     - Configure Seerr integration in Dashboard > Plugins > Moonbase
-    - Retro Games ([wiki](https://github.com/Moonfin-Client/Plugin/wiki/Retro-Games)):
-      - Dashboard > Plugins > Moonbase > enable Retro Games (`GamesEnabled`)
-      - Point it at the **Games** library (name must contain game/rom/emulator for auto-detect)
-      - Layout under `/data/media/games` (one folder per system):
-        - `Mega Drive/` — `.md` / `.gen` / `.zip` / `.7z`; no BIOS required
-        - `PlayStation/` — single-file `.chd` or `.pbp` only (not `.cue`/`.bin`/`.m3u`)
-      - PlayStation needs a BIOS file at the system folder root (e.g. `scph5501.bin`). Provide your own legally obtained ROMs and BIOS; systems stay empty until you copy files in
-      - Play in Moonfin at http://master.local:8096/Moonfin/Web/ (stock Jellyfin will not play ROMs)
 
 ### Set up Seerr
 
