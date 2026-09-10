@@ -2,6 +2,8 @@
 
 This is a media server for media library management. It uses PIA WireGuard vpn provider, if you have a different VPN provider or need to use OpenVPN - you might need to tweak the scripts.
 
+This project started from [ewancoder/tyr-lab](https://github.com/ewancoder/tyr-lab).
+
 ## Design decisions / architecture
 
 Everything is stored under one big **master** folder.
