@@ -138,10 +138,10 @@ services:
     pid: host
     privileged: true
     environment:
-      - GLANCES_OPT=-w
+      - GLANCES_OPT=-w --port ${GLANCES_PORT}
       - DOCKER_HOST=tcp://${STACK}-dockerproxy:2375
     ports:
-      - ${GLANCES_PORT}:61208
+      - ${GLANCES_PORT}:${GLANCES_PORT}
     #volumes:
     #  - './glances/glances.conf:/glances/conf/glances.conf'
     volumes:
@@ -158,7 +158,7 @@ services:
               count: 1
               capabilities: [gpu]
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:61208/api/4/status"]
+      test: ["CMD", "curl", "-sf", "http://localhost:${GLANCES_PORT}/api/4/status"]
 
   backdrops-sync:
     image: alpine:latest
