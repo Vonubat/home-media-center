@@ -159,9 +159,10 @@ export class WeatherWidget extends Widget {
   }
 
   #dayHtml(date, index, daily, timezone) {
+    const cond = this.#escape(conditionText(daily.weather_code[index]));
     return `
       <div class="weather__day">
-        <img src="${iconUrl(daily.weather_code[index], true)}" alt="" width="42" height="42" />
+        <img src="${iconUrl(daily.weather_code[index], true)}" alt="${cond}" title="${cond}" width="42" height="42" />
         <div class="weather__day-name">${this.#forecastLabel(date, index, timezone)}</div>
         <div class="weather__range">
           <span class="weather__high">${this.#round(daily.temperature_2m_max[index])}°</span>
@@ -187,11 +188,12 @@ export class WeatherWidget extends Widget {
     const current = data.current;
     const daily = data.daily;
     const code = current.weather_code;
+    const cond = this.#escape(conditionText(code));
     const timezone = options.timezone;
     const days = daily.time.map((date, i) => this.#dayHtml(date, i, daily, timezone)).join('');
 
     return this.#layoutHtml(
-      `<img class="weather__hero" src="${iconUrl(code, current.is_day === 1)}" alt="" width="104" height="104" />`,
+      `<img class="weather__hero" src="${iconUrl(code, current.is_day === 1)}" alt="" title="${cond}" width="104" height="104" />`,
       this.#nowHtml({
         city: this.#escape(options.city),
         temp: `${this.#round(current.temperature_2m)}°`,
